@@ -1,0 +1,328 @@
+import telebot
+import Config_bot
+from telebot import types
+import random
+
+
+def listener(messages):
+    for message in messages:
+        if message.content_type == 'text':
+            print(str(message.chat.first_name) +
+                  " [" + str(message.chat.id) + "]: " + message.text)
+
+
+
+bot = telebot.TeleBot(Config_bot.TOKEN)
+bot.set_update_listener(listener)
+
+@bot.message_handler(commands=['start'])
+def welcome(message):
+    sti = open('static/megumin.gif.mp4 ', 'rb')
+    bot.send_animation(message.chat.id, sti)
+
+    markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
+    genres = types.KeyboardButton("Жанры")
+
+
+
+    markup.add(genres)
+
+
+    bot.send_message(message.chat.id,
+                     "Добро пожаловать, {0.first_name}!\nЯ - <b>{1.first_name}</b>, бот созданный для подбора вам разнообразного аниме.".format(
+                         message.from_user, bot.get_me()),
+                     parse_mode='html', reply_markup=markup)
+
+
+senen_genres_blank = [f'Наруто 1 сезон: https://jut.su/narutoo/season-1/\nНаруто 2 сезон: https://jut.su/narutoo/season-2/',
+                      'Хвост феи: https://jut.su/fairy-tail/',
+                      f'Тетрадь Смерти: https://jut.su/dnote/',
+                      'Атака титанов: https://jut.su/shingeki-kyojin/',
+                      'Стальной алхимик: https://jut.su/fullmetal-alchemist/', 'Моя геройская академия: https://jut.su/boku-no-hero-academia/',
+                      'Хантер х Хантер: https://jut.su/hunter-hunter/', 'Бездомный бог: https://jut.su/noragami/',
+                      'Дневник будущего: https://jut.su/mirai-nikki/', 'Клинок, рассекающий демонов: https://jut.su/kimetsu-yaiba/',
+                      'Убийца Акаме: https://jut.su/akame-ga-killa/', 'Семь смертных грехов: https://jut.su/nanatsu-no-taizai/',
+                      'Синий экзорцист: https://jut.su/ao-no-exorcist/', 'Ван Пис: https://jut.su/one-piece/',
+                      'Блич: https://jut.su/bleeach/', 'Класс убийц: https://jut.su/roomination/',
+                      'Волейбол: https://jut.su/haikyu/', 'Пожиратель душ: https://jut.su/soul-eater/',
+                      'Обещанный неверленд: https://jut.su/yakusoku-neverland/', 'Повар-боец сома: https://jut.su/shokugeki-no-souma/', 'Блич: https://jut.su/bleeach/']
+
+sedze_genres_blank = ['Президент-горничная: https://jut.su/kaichou-wa-maid/', 'Монстр за соседней партой: https://jut.su/kaibutsu-kun/',
+                      'Дотянуться до тебя: https://jut.su/kimi-ni-todoke/', 'Дорога юности: https://jut.su/aoharu-ride/',
+                      'Рассвет Йоны: https://jut.su/akatsuki-no-yona/', 'Орендж: https://jut.su/orange/', 'Моя история: https://jut.su/ore-monougatari/']
+
+dzesey_genres_blank = ['Академия поднебесной: https://anifilm.tv/releases/424-nerawareta-gakuen', 'Аккун и его девушка: https://animego.org/anime/akkun-i-devushka-502',
+                       'Амнезия: https://jut.su/amnesia/', 'Убивающая любовь аниме: https://animestars.org/aniserials/video/action/1353-ubivajuschaja-ljubov.html'
+                       ]
+
+
+comedy_generes_blank = ['Я — Сакамото, а что?: https://jut.su/sakamoto/', 'Повседневная Жизнь Старшеклассников: https://jut.su/danshi-koukousei-no-nichijou/', 'Вечно ленивый Танака: https://jut.su/tanaka-kun-wa-itsumo-kedaruge/']
+
+mecha_generes_blank = ['Код Гиасс: Восстание Лелуша: https://jut.su/code-geass/']
+
+
+all_animes_links = [f'Наруто 1 сезон: https://jut.su/narutoo/season-1/\nНаруто 2 сезон: https://jut.su/narutoo/season-2/',
+                    'Хвост феи: https://jut.su/fairy-tail/',
+                    'Тетрадь смерти: https://jut.su/dnote/',
+                    'Атака титанов: https://jut.su/shingeki-kyojin/',
+                    'Стальной алхимик: https://jut.su/fullmetal-alchemist/', 'Моя геройская академия: https://jut.su/boku-no-hero-academia/',
+                    'Хантер х Хантер: https://jut.su/hunter-hunter/', 'Бездомный бог: https://jut.su/noragami/',
+                    'Дневник будущего: https://jut.su/mirai-nikki/', 'Клинок, рассекающий демонов: https://jut.su/kimetsu-yaiba/',
+                    'Убийца Акаме: https://jut.su/akame-ga-killa/', 'Семь смертных грехов: https://jut.su/nanatsu-no-taizai/',
+                    'Синий экзорцист: https://jut.su/ao-no-exorcist/', 'Ван Пис: https://jut.su/one-piece/',
+                    'Блич: https://jut.su/bleeach/', 'Класс убийц: https://jut.su/roomination/',
+                    'Волейбол: https://jut.su/haikyu/', 'Пожиратель душ: https://jut.su/soul-eater/',
+                    'Обещанный неверленд: https://jut.su/yakusoku-neverland/', 'Повар-боец сома: https://jut.su/shokugeki-no-souma/',
+                    'Президент-горничеая: https://jut.su/kaichou-wa-maid/',
+                    'Монстр за соседней партой: https://jut.su/kaibutsu-kun/',
+                    'Дотянуться до тебя: https://jut.su/kimi-ni-todoke/', 'Дорога юности: https://jut.su/aoharu-ride/',
+                    'Рассвет Йоны: https://jut.su/akatsuki-no-yona/', 'Орендж: https://jut.su/orange/',
+                    'Моя история: https://jut.su/ore-monougatari/',
+                    'Академия поднебесной: https://anifilm.tv/releases/424-nerawareta-gakuen',
+                    'Аккун и его девушка: https://animego.org/anime/akkun-i-devushka-502',
+                    'Амнезия: https://jut.su/amnesia/',
+                    'Сад изящных слов: https://animego.org/anime/sad-izyaschnyh-slov-162', 'Твоё имя: https://animego.cc/1832-tvoe-imya.html',
+                    'Пять сантиметров в секунду: https://animego.org/anime/pyat-santimetrov-v-sekundu-1155', 'Ловцы забытых голосов: https://free.lordfilm.lu/22378-anime-lovcy-zabytyh-golosov.html',
+                    'Форма голоса: https://animego.online/407-forma-golosa-v23.html','Ученик чудовища: https://yummyanime.tv/698-uchenik-chudovischa.html',
+                    'Укрась прощальное утро цветами обещания: https://animego.org/anime/ukras-proschalnoe-utro-cvetami-obeschaniya1-796',
+                    'Код Гиасс: Восстание Лелуша: https://jut.su/code-geass/', 'блич: https://jut.su/bleeach/'
+                    ]
+
+recommendation = ['Бездомный бог: https://jut.su/noragami/', 'Атака титанов: https://jut.su/shingeki-kyojin/',
+                  f'Тетрадь Смерти: https://jut.su/dnote/',
+                  'Стальной алхимик: https://jut.su/fullmetal-alchemist/', 'Моя геройская академия: https://jut.su/boku-no-hero-academia/',
+                  'Клинок, рассекающий демонов: https://jut.su/kimetsu-yaiba/', 'Убийца Акаме: https://jut.su/akame-ga-killa/',
+                  'Синий экзорцист: https://jut.su/ao-no-exorcist/', 'Класс убийц: https://jut.su/roomination/',
+                  'Волейбол: https://jut.su/haikyu/',
+                  'Президент-горничеая: https://jut.su/kaichou-wa-maid/', 'Блич: https://jut.su/bleeach/']
+
+
+
+
+
+@bot.message_handler(content_types=['text'])
+def Terminal(message):
+    global score1, score2, i
+    chat_id = message.chat.id
+    genres1 = types.ReplyKeyboardMarkup(resize_keyboard=True)
+    zanr = types.KeyboardButton("Жанры")
+    random_anim = types.KeyboardButton("Рандомное аниме")
+
+
+    genres1.add(random_anim, zanr)
+    # Жанры
+    if message.text == 'Жанры':
+        bot.send_message(message.chat.id, 'Выберите жанр, который хотите посмотреть. Чтобы получить список жанров напишите "Жанры". Для поиска просто введите название аниме, которое хотите посмотреть'.format(message.from_user, bot.get_me()), parse_mode='html', reply_markup=genres1)
+        bot.send_message(message.chat.id, f'Вот список жанров:\n /Senen (Сёнен)\n /Sedze (Сёдзё)\n /Dzesei (Дзёсэй)\n /comedy (Комедия)\n /rec (Рекомендации от автора)')
+
+    # Выход
+    if message.text == 'Выйти':
+        global score1, score2
+        score1 = 3
+        score2 = 0
+        bot.send_message(message.chat.id,
+                         'Напишите жанр, который хотите посмотреть или простовведите название аниме. Чтобы получить список жанров напишите "Жанры". Для поиска просто введите название аниме, которое хотите посмотреть'.format(message.from_user, bot.get_me()),
+                         parse_mode='HTML', reply_markup=genres1)
+        bot.send_message(message.chat.id, f'Вот список жанров:\n /Senen (Сёнен)\n /Sedze (Сёдзё)\n /Dzesei (Дзёсэй)\n /comedy (Комедия)\n /rec (Рекомендации)')
+
+
+   # Рандомная анимешка
+    if message.text == 'Рандомное аниме':
+        how_number = random.randint(0, len(all_animes_links) - 1)
+        bot.send_message(chat_id, all_animes_links[how_number])
+
+    # поиск аниме
+    if len(message.text) < 3:
+        bot.send_message(message.chat.id, "Извините, но для поиска аниме надо написать название из 3-х символов ")
+        pass
+    elif message.text in com:
+        pass
+    else:
+        for elem in all_animes_links:
+            if message.text.lower() in elem or message.text in elem:
+                bot.send_message(message.chat.id, elem)
+                break
+
+
+
+    # Сёнен аниме
+    if message.text == "/Senen":
+        exits = types.KeyboardButton("Выйти")
+        senen_anime = types.ReplyKeyboardMarkup(resize_keyboard=True)
+        next_senen_anim = types.KeyboardButton("следующие сёнен-аниме")
+        senen_anime.add(next_senen_anim, exits)
+        chat_id = message.chat.id
+        for i in range(score1):
+            bot.send_message(chat_id, senen_genres_blank[i], parse_mode='HTML', reply_markup=senen_anime)
+
+    if message.text == "следующие сёнен-аниме":
+        try:
+            score1 += 3
+            score2 += 3
+            senen_anime = types.ReplyKeyboardMarkup(resize_keyboard=True)
+            next_senen_anim = types.KeyboardButton("следующие сёнен-аниме")
+            exits = types.KeyboardButton("Выйти")
+            senen_anime.add(next_senen_anim, exits)
+            chat_id = message.chat.id
+            for i in range(score2, score1):
+                bot.send_message(chat_id, senen_genres_blank[i], parse_mode='HTML', reply_markup=senen_anime)
+        except IndexError:
+            exit_ = types.ReplyKeyboardMarkup(resize_keyboard=True)
+            exits = types.KeyboardButton("Выйти")
+            exit_.add(exits)
+            chat_id = message.chat.id
+            bot.send_message(chat_id, 'Извините, список закончился', parse_mode='HTML', reply_markup=exit_)
+
+    # Сёдзё аниме
+    if message.text == '/Sedze':
+        sedzen_anime = types.ReplyKeyboardMarkup(resize_keyboard=True)
+        next_sedzen_anim = types.KeyboardButton("следующие сёдзё-аниме")
+        exits = types.KeyboardButton("Выйти")
+        sedzen_anime.add(next_sedzen_anim, exits)
+        chat_id = message.chat.id
+        for i in range(score1):
+            bot.send_message(chat_id, sedze_genres_blank[i], parse_mode='HTML', reply_markup=sedzen_anime)
+
+    if message.text == "следующие сёдзё-аниме":
+        try:
+            score1 += 3
+            score2 += 3
+            sedzen_anime = types.ReplyKeyboardMarkup(resize_keyboard=True)
+            next_sedzen_anim = types.KeyboardButton("следующие сёдзё-аниме")
+            exits = types.KeyboardButton("Выйти")
+            sedzen_anime.add(next_sedzen_anim, exits)
+            chat_id = message.chat.id
+            for i in range(score2, score1):
+                bot.send_message(chat_id, sedze_genres_blank[i], parse_mode='HTML', reply_markup=sedzen_anime)
+        except IndexError:
+            exit_ = types.ReplyKeyboardMarkup(resize_keyboard=True)
+            exits = types.KeyboardButton("Выйти")
+            exit_.add(exits)
+            chat_id = message.chat.id
+            bot.send_message(chat_id, 'Извините, список закончился', parse_mode='HTML', reply_markup=exit_)
+
+        # Дзё или Дзёсэй
+    if message.text == '/Dzesei':
+        dzesey_anime = types.ReplyKeyboardMarkup(resize_keyboard=True)
+        next_dzesey_anim = types.KeyboardButton("следующие дзёсей-аниме")
+        exits = types.KeyboardButton("Выйти")
+        dzesey_anime.add(next_dzesey_anim, exits)
+        chat_id = message.chat.id
+        for i in range(score1):
+            bot.send_message(chat_id, dzesey_genres_blank[i], parse_mode='HTML', reply_markup=dzesey_anime)
+
+    if message.text == 'следующие дзёсей-аниме':
+        try:
+            score1 += 3
+            score2 += 3
+            dzesey_anime = types.ReplyKeyboardMarkup(resize_keyboard=True)
+            next_dzesey_anim = types.KeyboardButton("следующие дзёсей-аниме")
+            exits = types.KeyboardButton("Выйти")
+            dzesey_anime.add(next_dzesey_anim, exits)
+            chat_id = message.chat.id
+            for i in range(score2, score1):
+                bot.send_message(chat_id, dzesey_genres_blank[i], parse_mode='HTML', reply_markup=dzesey_anime)
+        except IndexError:
+            exit_ = types.ReplyKeyboardMarkup(resize_keyboard=True)
+            exits = types.KeyboardButton("Выйти")
+            exit_.add(exits)
+            chat_id = message.chat.id
+            bot.send_message(chat_id, 'Извините, список закончился', parse_mode='HTML', reply_markup=exit_)
+
+    # комедии
+    if message.text == '/comedy':
+        comedy_anime = types.ReplyKeyboardMarkup(resize_keyboard=True)
+        next_comedy_anim = types.KeyboardButton("следующие комедийные аниме")
+        exits = types.KeyboardButton("Выйти")
+        comedy_anime.add(next_comedy_anim, exits)
+        chat_id = message.chat.id
+        for i in range(score1):
+            bot.send_message(chat_id, comedy_generes_blank[i], parse_mode='HTML', reply_markup=comedy_anime)
+
+    if message.text == "следующие комедийные аниме":
+        try:
+            score1 += 3
+            score2 += 3
+            comedy_anime = types.ReplyKeyboardMarkup(resize_keyboard=True)
+            next_comedy_anim = types.KeyboardButton("следующие комедийные аниме")
+            exits = types.KeyboardButton("Выйти")
+            comedy_anime.add(next_comedy_anim, exits)
+            chat_id = message.chat.id
+            for i in range(score2, score1):
+                bot.send_message(chat_id, comedy_generes_blank[i], parse_mode='HTML', reply_markup=comedy_anime)
+        except IndexError:
+            exit_ = types.ReplyKeyboardMarkup(resize_keyboard=True)
+            exits = types.KeyboardButton("Выйти")
+            exit_.add(exits)
+            chat_id = message.chat.id
+            bot.send_message(chat_id, 'Извините, список закончился', parse_mode='HTML', reply_markup=exit_)
+
+
+    # Меха
+    if message.text == 'Меха' or message.text == 'Меха' or message.text == 'меха' or message.text == 'меха':
+        mecha_anime = types.ReplyKeyboardMarkup(resize_keyboard=True)
+        next_mecha_anim = types.KeyboardButton("следующие меха аниме")
+        exits = types.KeyboardButton("Выйти")
+        mecha_anime.add(next_mecha_anim, exits)
+        chat_id = message.chat.id
+        for i in range(score1):
+            bot.send_message(chat_id, mecha_generes_blank[i], parse_mode='HTML', reply_markup=mecha_anime)
+
+    if message.text == "следующие меха аниме":
+        try:
+            score1 += 3
+            score2 += 3
+            mecha_anime = types.ReplyKeyboardMarkup(resize_keyboard=True)
+            next_mecha_anim = types.KeyboardButton("следующие меха аниме")
+            exits = types.KeyboardButton("Выйти")
+            mecha_anime.add(next_mecha_anim, exits)
+            chat_id = message.chat.id
+            for i in range(score2, score1):
+                bot.send_message(chat_id, mecha_generes_blank[i], parse_mode='HTML', reply_markup=mecha_anime)
+        except IndexError:
+            exit_ = types.ReplyKeyboardMarkup(resize_keyboard=True)
+            exits = types.KeyboardButton("Выйти")
+            exit_.add(exits)
+            chat_id = message.chat.id
+            bot.send_message(chat_id, 'Извините, список закончился', parse_mode='HTML', reply_markup=exit_)
+
+
+    # Рекомендации от автора
+    if message.text == '/rec':
+        recom_anime = types.ReplyKeyboardMarkup(resize_keyboard=True)
+        next_recom_anim = types.KeyboardButton("следующие рекомендации от автора")
+        exits = types.KeyboardButton("Выйти")
+        recom_anime.add(next_recom_anim, exits)
+        chat_id = message.chat.id
+        for i in range(score1):
+            bot.send_message(chat_id, recommendation[i], parse_mode='HTML', reply_markup=recom_anime)
+
+    if message.text == "следующие рекомендации от автора":
+        try:
+            score1 += 3
+            score2 += 3
+            recom_anime = types.ReplyKeyboardMarkup(resize_keyboard=True)
+            next_recom_anim = types.KeyboardButton("следующие рекомендации от автора")
+            exits = types.KeyboardButton("Выйти")
+            recom_anime.add(next_recom_anim, exits)
+            chat_id = message.chat.id
+            for i in range(score2, score1):
+                bot.send_message(chat_id, recommendation[i], parse_mode='HTML', reply_markup=recom_anime)
+        except IndexError:
+            exit_ = types.ReplyKeyboardMarkup(resize_keyboard=True)
+            exits = types.KeyboardButton("Выйти")
+            exit_.add(exits)
+            chat_id = message.chat.id
+            bot.send_message(chat_id, 'Извините, список закончился', parse_mode='HTML', reply_markup=exit_)
+
+
+
+
+
+
+
+com = ['Жанры', 'Рандомное аниме', '/Senen', '/Sedze', '/Dzesei', '/comedy', '/rec']
+# Счёт
+score1 = 3
+score2 = 0
+bot.polling(none_stop=True)
