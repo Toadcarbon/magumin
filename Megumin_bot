@@ -1,8 +1,10 @@
 import telebot
 import Config_bot
+
 from telebot import types
 import random
 
+banned_users = set()
 
 def listener(messages):
     for message in messages:
@@ -15,13 +17,17 @@ def listener(messages):
 bot = telebot.TeleBot(Config_bot.TOKEN)
 bot.set_update_listener(listener)
 
+
+
+
 @bot.message_handler(commands=['start'])
 def welcome(message):
     sti = open('static/megumin.gif.mp4 ', 'rb')
     bot.send_animation(message.chat.id, sti)
-
     markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
     genres = types.KeyboardButton("Жанры")
+    bot.send_message(message.chat.id, "Этим ботом могут пользоваться только те, кому есть 18")
+
 
 
 
@@ -99,20 +105,21 @@ recommendation = ['Бездомный бог: https://jut.su/noragami/', 'Ата
 
 
 
-
 @bot.message_handler(content_types=['text'])
 def Terminal(message):
-    global score1, score2, i
+
+    global score1, score2, i, R18
     chat_id = message.chat.id
     genres1 = types.ReplyKeyboardMarkup(resize_keyboard=True)
     zanr = types.KeyboardButton("Жанры")
     random_anim = types.KeyboardButton("Рандомное аниме")
 
-
     genres1.add(random_anim, zanr)
     # Жанры
     if message.text == 'Жанры':
-        bot.send_message(message.chat.id, 'Выберите жанр, который хотите посмотреть. Чтобы получить список жанров напишите "Жанры". Для поиска просто введите название аниме, которое хотите посмотреть'.format(message.from_user, bot.get_me()), parse_mode='html', reply_markup=genres1)
+        bot.send_message(message.chat.id, 'Хозяин, вот, что я могу вам показать. Выберите что-то из этого'.format(message.from_user, bot.get_me()), parse_mode='html', reply_markup=genres1)
+        ph_meg = open('static/meg.jpg', 'rb')
+        bot.send_photo(message.chat.id, ph_meg)
         bot.send_message(message.chat.id, f'Вот список жанров:\n /Senen (Сёнен)\n /Sedze (Сёдзё)\n /Dzesei (Дзёсэй)\n /comedy (Комедия)\n /rec (Рекомендации от автора)')
 
     # Выход
@@ -121,10 +128,13 @@ def Terminal(message):
         score1 = 3
         score2 = 0
         bot.send_message(message.chat.id,
-                         'Напишите жанр, который хотите посмотреть или простовведите название аниме. Чтобы получить список жанров напишите "Жанры". Для поиска просто введите название аниме, которое хотите посмотреть'.format(message.from_user, bot.get_me()),
-                         parse_mode='HTML', reply_markup=genres1)
-        bot.send_message(message.chat.id, f'Вот список жанров:\n /Senen (Сёнен)\n /Sedze (Сёдзё)\n /Dzesei (Дзёсэй)\n /comedy (Комедия)\n /rec (Рекомендации)')
-
+                         'Хозяин, вот, что я могу вам показать. Выберите что-то из этого'.format(message.from_user,
+                                                                                                 bot.get_me()),
+                         parse_mode='html', reply_markup=genres1)
+        ph_meg = open('static/meg.jpg', 'rb')
+        bot.send_photo(message.chat.id, ph_meg)
+        bot.send_message(message.chat.id,
+                         f'Вот список жанров:\n /Senen (Сёнен)\n /Sedze (Сёдзё)\n /Dzesei (Дзёсэй)\n /comedy (Комедия)\n /rec (Рекомендации от автора)')
 
    # Рандомная анимешка
     if message.text == 'Рандомное аниме':
@@ -132,10 +142,10 @@ def Terminal(message):
         bot.send_message(chat_id, all_animes_links[how_number])
 
     # поиск аниме
-    if len(message.text) < 3:
-        bot.send_message(message.chat.id, "Извините, но для поиска аниме надо написать название из 3-х символов ")
+    if message.text in com:
         pass
-    elif message.text in com:
+    elif len(message.text) < 3:
+        bot.send_message(message.chat.id, "Извините, но для поиска аниме надо написать название из 3-х символов ")
         pass
     else:
         for elem in all_animes_links:
@@ -321,7 +331,10 @@ def Terminal(message):
 
 
 
-com = ['Жанры', 'Рандомное аниме', '/Senen', '/Sedze', '/Dzesei', '/comedy', '/rec']
+R18 = 0
+n = 1
+
+com = ['Жанры', 'Рандомное аниме', '/Senen', '/Sedze', '/Dzesei', '/comedy', '/rec', 'Да']
 # Счёт
 score1 = 3
 score2 = 0
